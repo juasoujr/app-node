@@ -1,7 +1,7 @@
 (function(){
     angular.module('primeiraApp').controller('BillingCycleCtrl', [
         '$http',
-        'msg',
+        'msgs',
         BillingCycleController
     ])
 
@@ -11,7 +11,6 @@
 
         vm.create = function() {  
             $http.post(url, vm.billingCycle).then(function(response) {
-                vm.refresh()
                 msgs.addSuccess('Operação realizada com sucesso!')
               }).catch(function(response) {
                 msgs.addError(response.data.errors)
