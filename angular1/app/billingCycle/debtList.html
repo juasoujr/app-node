@@ -4,26 +4,31 @@
             <tr>
                 <th>Nome</th>
                 <th>Valor</th>
+                <th>Status</th>
                 <th>Ações</th>
             </tr>
         </thead>
         <tbody>
-           <tr ng-repeat="credit in bcCtrl.billingCycle.credits">
+           <tr ng-repeat="debt in bcCtrl.billingCycle.debts">
                <td>
-                   <input ng-model="credit.name" class="form-control" placeholde="Informe o Nome"
+                   <input ng-model="debt.name" class="form-control" placeholde="Informe o Nome"
                    ng-readonly="bcCtrl.tabDelete" />
                </td>
                <td>
-                   <input ng-model="credit.value" class="form-control" placeholder="Informe o Valor"
+                   <input ng-model="debt.value" class="form-control" placeholder="Informe o Valor"
                    ng-readonly="bcCtrl.tabDelete" type="number" />
+               </td>
+               <td>
+                  <input ng-model="debt.status"  class="form-control" placeholder="Informe o Status"
+                  ng-readonly="bcCtrl.tabDelete" />
                </td>
                <td class="table-actions">
                    <button class="btn btn-success" ng-class="{disable: bcCtrl.tabDelete}"
-                    ng-click="bcCtrl.addCredit($index)"><i class="fa fa-plus"></i></button>
+                    ng-click="bcCtrl.addDebt($index)"><i class="fa fa-plus"></i></button>
                    <button class="btn btn-warning" ng-class="{disable: bcCtrl.tabDelete}"
-                    ng-click="bcCtrl.cloneCredit($index,credit)"><i class="fa fa-clone"></i></button>
+                    ng-click="bcCtrl.cloneDebt($index, debt)"><i class="fa fa-clone"></i></button>
                     <button class="btn btn-danger" ng-class="{disable: bcCtrl.tabDelete}"
-                     ng-click="bcCtrl.deleteCredit($index)"><i class="fa fa-trash-o"></i></button>
+                     ng-click="bcCtrl.deleteDebt($index)"><i class="fa fa-trash-o"></i></button>
                </td>
            </tr>
         </tbody>
