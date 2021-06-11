@@ -7,6 +7,7 @@
             placeholder: '@',
             type: '@',
             model: '=',
+            readonly: '<',
         },
         controller: [
             'gridSystem',
