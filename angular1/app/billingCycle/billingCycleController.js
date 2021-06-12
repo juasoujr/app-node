@@ -1,25 +1,32 @@
-(function(){
+(function () {
     angular.module('primeiraApp').controller('BillingCycleCtrl', [
         '$http',
+        '$location',
         'msgs',
         'tabs',
         BillingCycleController
     ])
 
-    function BillingCycleController($http, msgs, tabs) {
+    function BillingCycleController($http, $location, msgs, tabs) {
         const vm = this
         const url = 'http://localhost:3003/api/billingCycles'
         
-        vm.refresh = function() {
-            $http.get(url).then(function(response){
+        vm.refresh = function () {
+            const page = parseInt($location.search().page) || 1
+            $http.get(`${url}?skip=${(page - 1) * 10}&limit=10`).then(function(response){
                 vm.billingCycle = {credits: [{}], debts: [{}]}
                 vm.billingCycles = response.data
-                vm.calculateValues()
-                tabs.show(vm, {tabList: true, tabCreate: true})
+                vm.calculateValues()                
+            
+                $http.get(`${url}/count`).then(function(response) {
+                  vm.pages = Math.ceil(response.data.value / 10)
+                  console.log('pages =', vm.pages)
+                  tabs.show(vm, {tabList: true, tabCreate: true})  
+                })
             })
         }
 
-        vm.create = function() { 
+        vm.create = function () { 
             $http.post(url, vm.billingCycle).then(function(response) {
                 vm.refresh()
                 msgs.addSuccess('Operação realizada com sucesso!')
@@ -28,7 +35,7 @@
             })
         }
 
-        vm.showTabUpdate =  function(billingCycle) {
+        vm.showTabUpdate = function(billingCycle) {
             vm.billingCycle = billingCycle
             vm.calculateValues()
             tabs.show(vm, {tabUpdate: true})
@@ -42,21 +49,21 @@
 
         vm.update = function() {
             const updateUrl = `${url}/${vm.billingCycle._id}`
-            $http.put(updateUrl, vm.billingCycle).then(function(response){
+            $http.put(updateUrl, vm.billingCycle).then(function(response) {
                 vm.refresh()
                 msgs.addSuccess('Operação realizada com sucesso!')
-            }).error(function(data) {
-                msgs.addError(data.errors)
+            }).catch(function(response) {
+                msgs.addError(response.data.errors)
             })
         }
         
-        vm.delete = function() {
+        vm.delete = function () {
             const deleteUrl = `${url}/${vm.billingCycle._id}`
-            $http.delete(deleteUrl, vm.billingCycle).then(function(response){
+            $http.delete(deleteUrl, vm.billingCycle).then(function(response) {
                 vm.refresh()
                 msgs.addSuccess('Operação realizada com sucesso!')    
-            }).error(function(data) {
-                msgs.addError(data.errors)
+            }).catch(function(response) {
+                msgs.addError(response.data.errors)
             })
         }
 
@@ -111,5 +118,4 @@
 
         vm.refresh()
     }
-
 })()
